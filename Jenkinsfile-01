@@ -29,6 +29,9 @@ pipeline {
         timestamps()
         ansiColor('xterm')
     }
+    environment {
+        JAVA_HOME='$(dirname $(dirname $(readlink -f /etc/alternatives/java)))'
+    }
     stages {
         stage ('Check docker connection') {
             steps {
