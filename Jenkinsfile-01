@@ -36,11 +36,13 @@ pipeline {
     stages {
         stage ('Check docker connection') {
             steps {
-                sh 'echo ${JAVA_HOME}'
-                sh 'echo ${PATH}'
-                sh 'java --version'
+                //cleanWs()
+                sh 'pwd'
+                //sh 'echo ${JAVA_HOME}'
+                //sh 'echo ${PATH}'
+                //sh 'java --version'
 
-                checkout scm    // Critical command!!!
+                //checkout scm    // Critical command!!!
                 //sh 'pwd'
                 //sh 'ls -lh'
                 //sh 'chmod u+x gradlew'
