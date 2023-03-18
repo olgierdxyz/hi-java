@@ -8,10 +8,11 @@
 
 pipeline {
     agent {
-        label 'ubi8-micro-git-jdk17'
-        //docker {
+        //label 'ubi8-micro-git-jdk17'
+        docker {
         //    image 'ubi8-micro-git-jdk17'
-        //}
+            image 'busybox'
+        }
     }
     triggers {
         githubPush()
