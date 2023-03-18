@@ -31,6 +31,7 @@ pipeline {
     }
     environment {
         JAVA_HOME=sh(returnStdout: true, script: '$(dirname $(dirname $(readlink -f /etc/alternatives/java)))').trim()
+        PATH="${JAVA_HOME}/bin:${PATH}"
     }
     stages {
         stage ('Check docker connection') {
