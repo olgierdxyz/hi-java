@@ -7,16 +7,17 @@
     gradlew wrapper --version
 */
 
+/*
+    Jenkins agent type: 'Cloud' setup critical pieces:
+      1. For 'Docker Host URI' provide a non-master ip like: tcp://192.168.11.49:4243 with installed and running Docker;
+         NOTE: Remember Docker daemon has to be started with: -H tcp://192.168.11.49:4243 -H unix:///var/run/docker.sock options enabled
+          which by default are disabled, so /lib/systemd/system/docker.service is likely to be modified
+      2. 'Server credentials' may be left empty
+      3. 'Enabled' checked
+      4. Set 'Docker Agent templates' Labels': my-ubi8-micro-git-jdk17
+*/
+
 pipeline {
-    /*
-        Jenkins agent type: "Cloud" setup critical pieces:
-          1. For "Docker Host URI" provide a non-master ip like: tcp://192.168.11.49:4243 with installed and running Docker;
-             NOTE: Remember Docker deamon has to be started with "-H tcp://192.168.11.49:4243 -H unix:///var/run/docker.sock" options enabled
-              which by default are disabled, so /lib/systemd/system/docker.service is likely to be modified
-          2. "Server credentials" may be left empty
-          3. "Enabled" checked
-          4. Set "Docker Agent templates' Labels": my-ubi8-micro-git-jdk17
-    */
     agent {
         label 'my-ubi8-micro-git-jdk17'
             //image 'olgierdxyz/ubi8-micro-git-jdk17'
