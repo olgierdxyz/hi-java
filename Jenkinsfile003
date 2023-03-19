@@ -8,32 +8,18 @@
 */
 
 pipeline {
-    /*
     agent {
-        // Select a node with a label 'deb' and then run a docker container within it based on specified image
-        docker {
-            label 'deb'
-            image 'olgierdxyz/ubi8-micro-git-jdk17'
-        }
-    }
-    */
-    /*
-    // Select a node with a label 'deb' and then build an image from Dockerfile <skipDefaultCheckout() must be disabled otherwise you will have no Dockerfile at this stage checked out yet> and then run corresponding container and continue within it with the pipeline
-    agent {
-        dockerfile {
-            label 'deb'
-            filename 'Dockerfile'
-        }
-    }
-    */
-    agent {
+        // Jenkins agent type: "Cloud" setup critical pieces:
+        //      1. For "Docker Host URI" provide a non-master ip like: tcp://192.168.11.49:4243 with installed and running Docker;
+        //         NOTE: Remember Docker deamon has to be started with "-H tcp://192.168.11.49:4243 -H unix:///var/run/docker.sock" options enabled
+        //          which by default are disabled, so /lib/systemd/system/docker.service is likely to be modified
+        //      2. "Server credentials" may be left empty
+        //      3. "Enabled" checked
+        //      4. Set "Docker Agent templates' Labels": my-ubi8-micro-git-jdk17
         label 'my-ubi8-micro-git-jdk17'
             //image 'olgierdxyz/ubi8-micro-git-jdk17'
             //filename 'Dockerfile'
-
-
-    }
-
+    }s
     triggers {
         githubPush()    // Remember not to add any special characters, including "-" in the name of Jenkinsfile "Script path"'s definition. Jenkinsfile001 is ok but not Jenkinsfile-001
     }
@@ -43,7 +29,7 @@ pipeline {
         retry(0)
         disableConcurrentBuilds abortPrevious: true
         buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))
-        //skipDefaultCheckout()   // Critical command!!!
+        skipDefaultCheckout()   // Critical command!!!
         skipStagesAfterUnstable()
         //timestamps()
         ansiColor('xterm')
@@ -53,14 +39,12 @@ pipeline {
         PATH = "${JAVA_HOME}/bin:${PATH}"
     }
     stages {
-
         stage ('######## Prepare environment ########') {
             steps {
                 cleanWs deleteDirs: true, disableDeferredWipeout: true        // "disableDeferredWipeout: true" - critical option! Note that if skipDefaultCheckout() is enabled then you don't want cleanWs here!!!
                 checkout scm                                                  // Critical command!!!
             }
         }
-
         stage ('######## Build application ########') {
             steps {
                 sh 'chmod u+x gradlew'
