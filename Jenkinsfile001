@@ -34,13 +34,13 @@ pipeline {
         PATH = "${JAVA_HOME}/bin:${PATH}"
     }
     stages {
-        stage ('Prepare environment') {
+        stage ('### Prepare environment ###') {
             steps {
-                cleanWs deleteDirs: true, disableDeferredWipeout: true
+                cleanWs deleteDirs: true, disableDeferredWipeout: true      // "disableDeferredWipeout: true" option might be critical!
                 checkout scm    // Critical command!!!
             }
         }
-        stage ('Build application') {
+        stage ('### Build application ###') {
             steps {
                 sh 'chmod u+x gradlew'
                 sh './gradlew build'
