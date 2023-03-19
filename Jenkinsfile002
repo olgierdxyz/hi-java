@@ -37,7 +37,7 @@ pipeline {
         retry(0)
         disableConcurrentBuilds abortPrevious: true
         buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))
-        skipDefaultCheckout()   // Critical command!!!
+        //skipDefaultCheckout()   // Critical command!!!
         skipStagesAfterUnstable()
         timestamps()
         ansiColor('xterm')
@@ -50,7 +50,7 @@ pipeline {
         stage ('######## Prepare environment ########') {
             steps {
                 cleanWs deleteDirs: true, disableDeferredWipeout: true      // "disableDeferredWipeout: true" - critical option!
-                checkout scm    // Critical command!!!
+                //checkout scm    // Critical command!!!
             }
         }
         stage ('######## Build application ########') {
