@@ -8,13 +8,17 @@
 */
 
 pipeline {
+    /*
     agent {
         // Select a node with a label 'deb' and then run a docker container within it based on specified image
         docker {
-            dockerfile
-            //label 'deb'
-            //image 'olgierdxyz/ubi8-micro-git-jdk17'
+            label 'deb'
+            image 'olgierdxyz/ubi8-micro-git-jdk17'
         }
+    }
+    */
+    agent {
+        dockerfile: true
     }
     triggers {
         githubPush()    // Remember not to add any special characters, including "-" in the name of Jenkinsfile "Script path"'s definition. Jenkinsfile001 is ok but not Jenkinsfile-001
