@@ -18,7 +18,7 @@ pipeline {
     }
     */
     agent {
-        dockerfile: true
+        dockerfile true
     }
     triggers {
         githubPush()    // Remember not to add any special characters, including "-" in the name of Jenkinsfile "Script path"'s definition. Jenkinsfile001 is ok but not Jenkinsfile-001
