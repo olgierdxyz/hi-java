@@ -1,8 +1,51 @@
 #!/usr/bin/env groovy
 
 /*
-    VERSION=$(curl -sSL https://services.gradle.org/versions/current |jq -r '.version')
-    gradlew wrapper --gradle-version $VERSION
+    // Adjust Gradle's version:
+    VERSION="$(curl -sSL https://services.gradle.org/versions/current |jq -r '.version')"
+    gradlew wrapper --gradle-version "$VERSION"
     gradlew wrapper --version
 */
 
+pipeline {
+    agent {
+        // Select a node with a label 'deb' and then run a docker container within it based on specified image
+        docker {
+            label 'deb'
+            image 'olgierdxyz/ubi8-micro-git-jdk17'
+        }
+    }
+    triggers {
+        githubPush()    // Remember not to add any special characters, including "-" in the name of Jenkinsfile "Script path"'s definition. Jenkinsfile001 is ok but not Jenkinsfile-001
+    }
+    options {
+        timeout(time: 1, unit: 'MINUTES')
+        quietPeriod(0)
+        retry(0)
+        disableConcurrentBuilds abortPrevious: true
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))
+        skipDefaultCheckout()   // Critical command!!!
+        skipStagesAfterUnstable()
+        timestamps()
+        ansiColor('xterm')
+    }
+    environment {
+        JAVA_HOME = sh(returnStdout: true, script: 'dirname $(dirname $(readlink -f /usr/bin/java))').trim()    // It's java home within docker container!
+        PATH = "${JAVA_HOME}/bin:${PATH}"
+    }
+    stages {
+        stage ('######## Prepare environment ########') {
+            steps {
+                cleanWs deleteDirs: true, disableDeferredWipeout: true      // "disableDeferredWipeout: true" - critical option!
+                checkout scm    // Critical command!!!
+            }
+        }
+        stage ('######## Build application ########') {
+            steps {
+                sh 'chmod u+x gradlew'
+                sh './gradlew build'
+
+            }
+        }
+    }
+}
