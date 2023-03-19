@@ -1,56 +1,49 @@
 #!/usr/bin/env groovy
 
 /*
-    VERSION=$(curl -sSL https://services.gradle.org/versions/current |jq -r '.version')
-    gradlew wrapper --gradle-version $VERSION
+    // Adjust Gradle's version:
+    VERSION="$(curl -sSL https://services.gradle.org/versions/current |jq -r '.version')"
+    gradlew wrapper --gradle-version "$VERSION"
     gradlew wrapper --version
 */
 
 pipeline {
     agent {
-        //label 'ubi8-micro-git-jdk17'
+        // Runs docker image on a node with 'deb' label'
         docker {
             label 'deb'
             image 'olgierdxyz/ubi8-micro-git-jdk17'
-            //image 'ubi8-micro-git-jdk17'
-            //image 'busybox'
         }
     }
     triggers {
-        githubPush()
+        githubPush()    // Remember not to add any special characters, including "-" in the name of Jenkinsfile "Script path"'s definition. Jenkinsfile001 is ok but not Jenkinsfile-001
     }
     options {
         timeout(time: 1, unit: 'MINUTES')
-        quietPeriod(1)
+        quietPeriod(0)
         retry(0)
         disableConcurrentBuilds abortPrevious: true
-        buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '14', numToKeepStr: '5'))
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))
         skipDefaultCheckout()   // Critical command!!!
-        //skipStagesAfterUnstable()
+        skipStagesAfterUnstable()
         timestamps()
         ansiColor('xterm')
     }
     environment {
-        JAVA_HOME = sh(returnStdout: true, script: 'dirname $(dirname $(readlink -f /usr/bin/java))').trim()
-        //JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-17.0.6.0.10-3.el8_7.x86_64'
+        JAVA_HOME = sh(returnStdout: true, script: 'dirname $(dirname $(readlink -f /usr/bin/java))').trim()    // It's java home within docker container!
         PATH = "${JAVA_HOME}/bin:${PATH}"
     }
     stages {
-        stage ('Check docker connection') {
+        stage ('Prepare environment') {
             steps {
-                //echo "${JAVA_HOME}"
-                //cleanWs()
-                //sh 'pwd'
-                //sh 'echo ${JAVA_HOME}'
-                //sh 'echo ${PATH}'
-                //sh 'java --version'
-
+                cleanWs()
                 checkout scm    // Critical command!!!
-                //sh 'pwd'
-                //sh 'ls -lh'
+            }
+        }
+        stage ('Build application') {
+            steps {
                 sh 'chmod u+x gradlew'
                 sh './gradlew build'
-                //
 
             }
         }
