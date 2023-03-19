@@ -17,6 +17,7 @@ pipeline {
         }
     }
     */
+    /*
     // Select a node with a label 'deb' and then build an image from Dockerfile <skipDefaultCheckout() must be disabled otherwise you will have no Dockerfile at this stage checked out yet> and then run corresponding container and continue within it with the pipeline
     agent {
         dockerfile {
@@ -24,6 +25,15 @@ pipeline {
             filename 'Dockerfile'
         }
     }
+    */
+    agent {
+        dockerfile {
+            label 'my-ubi8-micro-git-jdk17'
+            filename 'Dockerfile'
+        }
+
+    }
+
     triggers {
         githubPush()    // Remember not to add any special characters, including "-" in the name of Jenkinsfile "Script path"'s definition. Jenkinsfile001 is ok but not Jenkinsfile-001
     }

@@ -8,16 +8,8 @@
 */
 
 pipeline {
-    /*
-    agent {
-        // Select a node with a label 'deb' and then run a docker container within it based on specified image
-        docker {
-            label 'deb'
-            image 'olgierdxyz/ubi8-micro-git-jdk17'
-        }
-    }
-    */
-    // Select a node with a label 'deb' and then build an image from Dockerfile <skipDefaultCheckout() must be disabled otherwise you will have no Dockerfile at this stage checked out yet> and then run corresponding container and continue within it with the pipeline
+    // Select a node with a label 'deb' and then build an image from Dockerfile and then run corresponding container and continue within it with the pipeline
+    // NOTE: skipDefaultCheckout() must be disabled otherwise you will have no Dockerfile at this stage checked out yet!
     agent {
         dockerfile {
             label 'deb'
