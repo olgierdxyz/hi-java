@@ -17,15 +17,11 @@ pipeline {
         }
     }
     */
-    /*
-    agent {
-        dockerfile true
-    }
-    */
+    // Select a node with a label 'deb' and then build an image from Dockerfile <skipDefaultCheckout() must be disabled otherwise you will have no Dockerfile at this stage checked out yet> and then run corresponding container and continue within it with the pipeline
     agent {
         dockerfile {
-            filename 'Dockerfile'
             label 'deb'
+            filename 'Dockerfile'
         }
     }
     triggers {
@@ -55,7 +51,6 @@ pipeline {
             }
         }
         */
-
         stage ('######## Build application ########') {
             steps {
                 sh 'chmod u+x gradlew'
