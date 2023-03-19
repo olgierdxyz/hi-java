@@ -27,7 +27,7 @@ pipeline {
         buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '14', numToKeepStr: '5'))
         skipDefaultCheckout()   // Critical command!!!
         //skipStagesAfterUnstable()
-        //timestamps()
+        timestamps()
         ansiColor('xterm')
     }
     environment {
@@ -38,9 +38,9 @@ pipeline {
     stages {
         stage ('Check docker connection') {
             steps {
-                echo "${JAVA_HOME}"
+                //echo "${JAVA_HOME}"
                 //cleanWs()
-                sh 'pwd'
+                //sh 'pwd'
                 //sh 'echo ${JAVA_HOME}'
                 //sh 'echo ${PATH}'
                 //sh 'java --version'
