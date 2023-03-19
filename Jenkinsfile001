@@ -9,7 +9,7 @@
 
 pipeline {
     agent {
-        // Runs docker image on a node with 'deb' label'
+        // Select a node with a label 'deb' and then run a docker container within it based on specified image
         docker {
             label 'deb'
             image 'olgierdxyz/ubi8-micro-git-jdk17'
@@ -36,7 +36,7 @@ pipeline {
     stages {
         stage ('######## Prepare environment ########') {
             steps {
-                cleanWs deleteDirs: true, disableDeferredWipeout: true      // "disableDeferredWipeout: true" option might be critical!
+                cleanWs deleteDirs: true, disableDeferredWipeout: true      // "disableDeferredWipeout: true" - critical option!
                 checkout scm    // Critical command!!!
             }
         }
