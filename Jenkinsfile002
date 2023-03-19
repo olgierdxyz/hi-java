@@ -18,6 +18,7 @@ pipeline {
     }
     */
     agent {
+        label 'deb'
         dockerfile true
     }
     triggers {
