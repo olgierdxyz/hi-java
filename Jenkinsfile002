@@ -47,12 +47,15 @@ pipeline {
         PATH = "${JAVA_HOME}/bin:${PATH}"
     }
     stages {
+        /*
         stage ('######## Prepare environment ########') {
             steps {
-                cleanWs deleteDirs: true, disableDeferredWipeout: true      // "disableDeferredWipeout: true" - critical option!
-                //checkout scm    // Critical command!!!
+                //cleanWs deleteDirs: true, disableDeferredWipeout: true        // "disableDeferredWipeout: true" - critical option! Note that if skipDefaultCheckout() is enabled then you don't want cleanWs here!!!
+                //checkout scm                                                  // Critical command!!!
             }
         }
+        */
+
         stage ('######## Build application ########') {
             steps {
                 sh 'chmod u+x gradlew'
