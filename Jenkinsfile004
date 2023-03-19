@@ -1,0 +1,63 @@
+#!/usr/bin/env groovy
+
+/*
+    // Adjust Gradle's version:
+    VERSION="$(curl -sSL https://services.gradle.org/versions/current |jq -r '.version')"
+    gradlew wrapper --gradle-version "$VERSION"
+    gradlew wrapper --version
+*/
+
+pipeline {
+    agent {
+        /*  Architecture: Jenkins <-> Dockers tcp socket on remote host <-> Dockers container as runtime <--- Docker image
+            Jenkins agent type: 'Cloud' setup critical pieces:
+              1. For 'Docker Host URI' provide a non-master ip like: tcp://192.168.11.49:4243 with installed and running Docker;
+                 NOTE: Remember Docker daemon has to be started with: -H tcp://192.168.11.49:4243 -H unix:///var/run/docker.sock options enabled
+                  which by default are disabled, so /lib/systemd/system/docker.service is likely to be modified
+              2. 'Server credentials' may be left empty
+              3. 'Enabled' checked
+              4. Set 'Docker Agent templates' Labels': my-ubi8-micro-git-jdk17
+        */
+        dockerfile {
+            label 'my-ubi8-micro-git-jdk17'     // Docker Agent templates Labels
+            filename 'Dockerfile'
+            //image 'olgierdxyz/ubi8-micro-git-jdk17'
+            //filename 'Dockerfile'
+        }
+    }
+    triggers {
+        githubPush()    // Remember not to add any special characters, including "-" in the name of Jenkinsfile "Script path"'s definition. Jenkinsfile001 is ok but not Jenkinsfile-001
+    }
+    options {
+        timeout(time: 1, unit: 'MINUTES')
+        quietPeriod(0)
+        retry(0)
+        disableConcurrentBuilds abortPrevious: true
+        buildDiscarder(logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '5'))
+        //skipDefaultCheckout()   // Critical command!!!
+        skipStagesAfterUnstable()
+        //timestamps()
+        ansiColor('xterm')
+    }
+    environment {
+        JAVA_HOME = sh(returnStdout: true, script: 'dirname $(dirname $(readlink -f /usr/bin/java))').trim()    // It's java home within docker container!
+        PATH = "${JAVA_HOME}/bin:${PATH}"
+    }
+    stages {
+        /*
+        stage ('######## Prepare environment ########') {
+            steps {
+                cleanWs deleteDirs: true, disableDeferredWipeout: true        // "disableDeferredWipeout: true" - critical option! Note that if skipDefaultCheckout() is enabled then you don't want cleanWs here!!!
+                checkout scm                                                  // Critical command!!!
+            }
+        }
+        */
+        stage ('######## Build application ########') {
+            steps {
+                sh 'chmod u+x gradlew'
+                sh './gradlew build'
+
+            }
+        }
+    }
+}
