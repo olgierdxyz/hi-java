@@ -9,7 +9,7 @@
 
 pipeline {
     agent {
-        /*
+        /*  Architecture: Jenkins <-> Dockers tcp socket on remote host <-> Dockers container as runtime <--- Docker image
             Jenkins agent type: 'Cloud' setup critical pieces:
               1. For 'Docker Host URI' provide a non-master ip like: tcp://192.168.11.49:4243 with installed and running Docker;
                  NOTE: Remember Docker daemon has to be started with: -H tcp://192.168.11.49:4243 -H unix:///var/run/docker.sock options enabled
@@ -18,7 +18,7 @@ pipeline {
               3. 'Enabled' checked
               4. Set 'Docker Agent templates' Labels': my-ubi8-micro-git-jdk17
         */
-        label 'my-ubi8-micro-git-jdk17'
+        label 'my-ubi8-micro-git-jdk17'     // Docker Agent templates Labels
             //image 'olgierdxyz/ubi8-micro-git-jdk17'
             //filename 'Dockerfile'
     }
