@@ -32,7 +32,7 @@ pipeline {
     }
     environment {
         //JAVA_HOME = sh(returnStdout: true, script: '$(dirname $(dirname $(readlink -f /etc/alternatives/java)))').trim()
-        JAVA_HOME = /usr/lib/jvm/java-17-openjdk-amd64
+        JAVA_HOME = '/usr/lib/jvm/java-17-openjdk-amd64'
         //PATH = "${JAVA_HOME}/bin:${PATH}"
     }
     stages {
