@@ -11,8 +11,9 @@ pipeline {
     agent {
         // Select a node with a label 'deb' and then run a docker container within it based on specified image
         docker {
-            label 'deb'
-            image 'olgierdxyz/ubi8-micro-git-jdk17'
+            dockerfile
+            //label 'deb'
+            //image 'olgierdxyz/ubi8-micro-git-jdk17'
         }
     }
     triggers {
