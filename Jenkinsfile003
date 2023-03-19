@@ -29,7 +29,7 @@ pipeline {
     agent {
         docker {
             label 'my-ubi8-micro-git-jdk17'
-            image 'olgierdxyz/ubi8-micro-git-jdk17'
+            //image 'olgierdxyz/ubi8-micro-git-jdk17'
             //filename 'Dockerfile'
         }
 
