@@ -26,9 +26,6 @@ pipeline {
     triggers {
         githubPush()    // Remember not to add any special characters, including "-" in the name of Jenkinsfile "Script path"'s definition. Jenkinsfile001 is ok but not Jenkinsfile-001
     }
-    tools {
-        gradle 'gradlew'
-    }
     options {
         timeout(time: 1, unit: 'MINUTES')
         quietPeriod(0)
