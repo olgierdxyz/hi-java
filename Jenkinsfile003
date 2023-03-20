@@ -18,11 +18,11 @@ pipeline {
               3. 'Enabled' checked
               4. Set 'Docker Agent templates' Labels': my-ubi8-micro-git-jdk17
         */
-        label 'my-ubi8-micro-git-jdk17'     // Docker Agent templates Labels
+        label 'my-ubi8-micro-git-jdk1'     // Docker Agent templates Labels
             //image 'olgierdxyz/ubi8-micro-git-jdk17'
             //filename 'Dockerfile'
     }
-    //////
+
     triggers {
         githubPush()    // Remember not to add any special characters, including "-" in the name of Jenkinsfile "Script path"'s definition. Jenkinsfile001 is ok but not Jenkinsfile-001
     }
