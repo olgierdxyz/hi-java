@@ -53,6 +53,7 @@ pipeline {
                 sh 'chmod u+x gradlew'
                 sh './gradlew build'
                 //sh 'sleep infinity'
+
             }
         }
     }
