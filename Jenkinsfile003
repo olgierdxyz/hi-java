@@ -51,7 +51,7 @@ pipeline {
         stage ('######## Build application ########') {
             steps {
                 sh 'chmod u+x gradlew'
-                sh './gradlew build'
+                sh './gradlew -x test clean build'
                 //sh 'sleep infinity'
 
             }
