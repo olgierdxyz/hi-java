@@ -18,7 +18,7 @@ pipeline {
               3. 'Enabled' checked
               4. Set 'Docker Agent templates' Labels': my-ubi8-micro-git-jdk17
         */
-        label 'my-ubi8-micro-git-jdk17'     // Docker Agent templates Labels
+        label 'my-ubi8-micro-git-jdk17' cd     // Docker Agent templates Labels
             //image 'olgierdxyz/ubi8-micro-git-jdk17'
             //filename 'Dockerfile'
     }
@@ -50,6 +50,7 @@ pipeline {
         }
         stage ('######## Build application ########') {
             steps {
+                sh 'cat <(cat /etc/passwd)'
                 sh 'chmod u+x gradlew'
                 sh './gradlew -x test clean build'
                 //sh 'sleep infinity'
