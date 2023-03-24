@@ -50,9 +50,12 @@ pipeline {
         }
         stage ('######## Build application ########') {
             steps {
-                sh 'cat <(cat /etc/passwd)'
-                sh 'chmod u+x gradlew'
-                sh './gradlew -x test clean build'
+                sh '''#!/bin/bash
+
+                cat <(ls)'''
+                //sh 'cat <(cat /etc/passwd)'
+                //sh 'chmod u+x gradlew'
+                //sh './gradlew -x test clean build'
                 //sh 'sleep infinity'
 
             }
